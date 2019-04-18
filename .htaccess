@@ -17,10 +17,9 @@ RewriteEngine on
 
 # RewriteRule ^/~([^/]+)/?(.*) /u/$1/$2 [R]
 
+RewriteRule ^ startup.php [L]
 
-RewriteRule ^ app/startup.php [L]
-
-##DirectoryIndex app/startup.php
+##DirectoryIndex public/view/RealTimeStockChat.php
 
 #RewriteRule ^([a-z0-9\-]+)/([a-z0-9\-]+)/?$ index.php?c=$1&d=$2 [NC,L]
 
