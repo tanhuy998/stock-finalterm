@@ -5,13 +5,13 @@
         private static $ActionType_arr = ['Anonymous' , 'Controller'];
 
         private $uri;
-        private $loadedMethod;
+        //private $loadedMethod;
         private $middleware;
         private $redirectUri;
         private $meta;
         
         public function __construct() {
-            $this->meta = ['ActionType' => '', 'LoadFunction' => '', 'Controller' => ''];
+            $this->meta = [];
             return $this;
         }
 
@@ -34,7 +34,8 @@
 
         public function SetAction($_action) {
             if (is_callable($_action)) {
-                $this->loadMethod = $_action;
+                $this->meta['Method'] = $_action;
+                //$this->loadMethod = $_action;
             }
             if (is_string($_action)) {
                 if (strpos($_action,':') != false) {
@@ -43,7 +44,8 @@
                     $controller = $arr[0];
                     $method = $arr[1];
 
-                    $this->loadedMethod = $method;
+                    //$this->loadedMethod = $method;
+                    $this->meta['Method'] = $method;
                     $this->meta['Controller'] = $controller;
                 }
             }
@@ -53,22 +55,59 @@
         
         }
 
-        public function Load($args) {
-            if ($this->meta['Controller'] == '') {
-                $method = $this->loadMethod;
+        public function Load($_args) {
+
+            if (!isset($this->meta['Controller'])) {
+
+                $method = $this->meta['Method'];
                 if (is_callable($method)) {
-                    $method($args);
+
+                    $this->InvokeAnonymousMethod($_args);
+                    //$method($args);
                     //echo 'true';
                 }
             }
             else {
+                $this->InvokeControllerMethod($_args);
+            }
+        }
+
+        private function InvokeAnonymousMethod($_args) {
+            $method = $this->meta['Method'];
+
+            $func_reflector = new ReflectionFunction($method);
+
+            $paramNum = $func_reflector->GetNumberOfParameterS();
+
+            if ($paramNum != 0) {
+                $func_reflector->InvokeArgs($_args);
+            }
+            else {
+                $func_reflector->Invoke();
+            }
+        }
+
+        private function InvokeControllerMethod($_args) {
+            $is_anonymous;
+
+            //if (!$is_anonymous) {
                 $Class_controller = $this->meta['Controller'];
 
                 $controller = new $Class_controller();
 
-                $method = $this->loadMethod;
-                $controller->$method();
-            }
+                $method = $this->meta['Method'];
+
+                $method_reflector = new ReflectionMethod($Class_controller, $method);
+
+                $paramNum = $method_reflector->GetNumberOfParameters();
+
+                if ($paramNum != 0) {
+                    $method_reflector->InvokeArgs($controller,$_args);
+                }
+                else {
+                    $method_reflector->Invoke($controller);
+                }
+            //}
         }
 
         private function LoadMiddleware() {

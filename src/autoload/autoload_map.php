@@ -1,9 +1,10 @@
 <?php 
-    $src = dirname(__DIR__);
+    //require_once '../define.php';
 
+    $base_path = dirname(dirname(__DIR__));
+    
     return [
-        'Router' => $src.'\router\router.php',
-        'RouteMap' => $src.'\router\routemap.php',
-        'Route' => $src.'\router\route.php',
-        'Singleton' => $src.'\singleton.php',
+        'Router' => $base_path.'\src\router\router.php',
+        'RouteMap' => $base_path.'\src\router\routemap.php',
+        'Route' => $base_path.'\src\router\route.php',
     ];

@@ -8,7 +8,7 @@
             $map = [];
         }
 
-        public function New(string $_uri, $_action) {
+        public function Add(string $_uri, $_action) {
             if (!isset($this->map[$_uri])) {
 
 

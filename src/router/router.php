@@ -45,6 +45,7 @@
             if ($this->ExistsRoute($uri)) {
                 $route = $this->routes;
                 //
+                var_dump($uri);
                 $route->$uri($request_data);    
             }
             //else return redirect('404');
