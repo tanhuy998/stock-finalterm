@@ -1,23 +1,24 @@
-<IfModule mod_rewrite.c>
+#<IfModule mod_rewrite.c>
 
 
 # Tell PHP that the mod_rewrite module is ENABLED.
 
-SetEnv HTTP_MOD_REWRITE On
+#SetEnv HTTP_MOD_REWRITE On
 
 Options FollowSymLinks
 
 RewriteEngine on
 
-#RewriteCond %{REQUEST_FILENAME} !-f
-
-#RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 
 # The rest of your rewrite rules here
 
 # RewriteRule ^/~([^/]+)/?(.*) /u/$1/$2 [R]
 
 RewriteRule ^ startup.php [L]
+
+RewriteRule !^(public/|startup\.php) [NC,F]
 
 ##DirectoryIndex public/view/RealTimeStockChat.php
 
@@ -26,5 +27,5 @@ RewriteRule ^ startup.php [L]
 # Handle product requests
 
 
-</IfModule>
+#</IfModule>
 
