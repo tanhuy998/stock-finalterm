@@ -1,7 +1,8 @@
 <?php 
     //echo microtime();
-    require_once 'src/autoload/autoload.php';
     require_once 'src/define.php';
+    require_once 'src/autoload/autoload.php';
+    
     
     Router::Routes()->Add('/test', function ($data) {
         var_dump($data);
@@ -11,6 +12,8 @@
 
     //print_r($arr);
     echo Router::Routes()->Exist('/foo');
+
+    echo Parser::ParseUri('/abc?a');
 
     $request = [
         'uri' => '/con',
