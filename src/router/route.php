@@ -84,6 +84,8 @@
                 $this->Redirect($redirect_link);
             }
 
+            $this->LoadMiddleware($_args);
+
             if (!isset($this->meta['Controller'])) {
 
                 $method = $this->meta['Method'];
@@ -138,7 +140,7 @@
             //}
         }
 
-        private function LoadMiddleware() {
+        private function LoadMiddleware($_args) {
             $middleware = $this->middleware;
 
             if (!isset($middleware)) {
@@ -146,15 +148,17 @@
             }
 
             if (is_callable($middleware)) {
-
+                $this->InvokeAnonymousMethod($_args);
             }
 
             if (is_string($middleware)) {
                 $middleware_list = explode(',',$middleware);
 
-                foreach ($middleware_list as $mid) {
+                foreach ($middleware_list as $middleware) {
 
-                    $mid();
+                    $mid = new $middleware();
+
+                    $mid->Invoke($_args);
                 }
             }
         }

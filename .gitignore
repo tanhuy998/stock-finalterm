@@ -3,5 +3,6 @@ route/
 
 startup.php
 
+src/middleware/
 src/define.php
 MVC/
