@@ -46,6 +46,7 @@
                 $routes = $this->routes;
                 //
                 //var_dump($uri);
+                //echo $uri;
                 $routes->$uri($request_data);    
             }
             else return $this->redirectHttpCode('404');
@@ -58,7 +59,7 @@
                 $code = intval($_code);
                 http_response_code($code);
 
-                echo 1;
+                echo '<h1>404</h1>';
             }
             
             return false;

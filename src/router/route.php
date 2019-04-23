@@ -7,7 +7,6 @@
         private $uri;
         //private $loadedMethod;
         private $middleware;
-        private $redirectUri;
         private $meta;
         
         public function __construct() {
@@ -26,8 +25,10 @@
             return $this;
         }
 
-        public function SetRedirect($_uri) {
-            $this->redirectUri = $_uri;
+        public function SetRedirect(string $_link) {
+            $link = str_replace(' ', '', $_link);
+
+            $this->meta['Redirect'] = $link;
 
             return $this;
         }
@@ -38,16 +39,20 @@
                 //$this->loadMethod = $_action;
             }
             if (is_string($_action)) {
-                if (strpos($_action,':') != false) {
+                $this->BindControllerAction($_action);
+            }
+        }
 
-                    $arr = explode(':',$_action);
-                    $controller = $arr[0];
-                    $method = $arr[1];
+        private function BindControllerAction($_action) {
+            if (strpos($_action,':') != false) {
 
-                    //$this->loadedMethod = $method;
-                    $this->meta['Method'] = $method;
-                    $this->meta['Controller'] = $controller;
-                }
+                $arr = explode(':',$_action);
+                $controller = $arr[0];
+                $method = $arr[1];
+
+                //$this->loadedMethod = $method;
+                $this->meta['Method'] = $method;
+                $this->meta['Controller'] = $controller;
             }
         }
 
@@ -55,7 +60,29 @@
         
         }
 
+        private function Redirect($_link) {
+
+            if (filter_var($_link, FILTER_VALIDATE_URL) === true) {
+                header('Location: '.$_link, true);
+                exit();
+            }
+            else {
+                //echo SUB_PATH_DOMAIN_NAME.$_link;
+
+                header('Location: '.SUB_PATH_DOMAIN_NAME.$_link);
+                //echo 1; 
+                //exit();
+            }
+
+        }
+
+
         public function Render($_args) {
+            if (isset($this->meta['Redirect'])) {
+                $redirect_link = $this->meta['Redirect'];
+
+                $this->Redirect($redirect_link);
+            }
 
             if (!isset($this->meta['Controller'])) {
 
@@ -70,6 +97,7 @@
             else {
                 $this->InvokeControllerMethod($_args);
             }
+
         }
 
         private function InvokeAnonymousMethod($_args) {

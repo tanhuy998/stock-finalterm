@@ -4,22 +4,23 @@
     require_once 'src/autoload/autoload.php';
     
     
-    Router::Routes()->Add('/test', function ($data) {
+    Router::Routes()->Add('test/', function ($data) {
         var_dump($data);
-    });
+    })->SetRedirect('new/');
 
-    Router::Routes()->Add('/con','TestController:Test');
+    Router::Routes()->Add('new/','TestController:Test');
 
     //print_r($arr);
     // echo Router::Routes()->Exist('/foo');
-
+    
     // echo Parser::ParseUri('/abc?a');
 
-    $request = [
-        'uri' => '/iuopo',
-        'data' => '1234',
-    ];
+    $request = [];
+    //echo $_SERVER['REQUEST_URI'];
+    $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
+    $request['data'] = '123';
 
+    //echo $request['uri'];
     Router::GetObject()->Map($request);
 
     //echo '<br>'.microtime();
