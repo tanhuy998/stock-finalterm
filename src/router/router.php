@@ -12,11 +12,13 @@
         private static $router;
 
         private $routes;
+        private $redirectMap;
 
         //private static $router;
 
         private function __construct() {
             $this->routes = new RouteMap();
+            $this->redirectMap = [];
         }
 
         public function SetRoute(string $_uri, $action) {
@@ -38,9 +40,28 @@
 
         }
 
+        private function IsRedirected(string $_uri): bool {
+            if (isset($this->redirectMap[$_uri])) {
+                return true;
+            }
+            else return false;
+        }
+
         public function Map(array $_request) {
             $uri = $_request['uri'];
             $request_data = $_request['data'];
+
+            if ($this->IsRedirected($uri)) {
+                $redirect_link = $this->redirectMap[$uri];
+                
+                if (filter_var($redirect_link, FILTER_VALIDATE_URL) === true) {
+                    
+                    header('Location: '.$redirect_link);
+                }
+                else {
+                    header('Location: '.SUB_PATH_DOMAIN_NAME.$redirect_link);
+                }
+            }
 
             if ($this->ExistsRoute($uri)) {
                 $routes = $this->routes;
@@ -77,6 +98,13 @@
             self::$router = new self();
             return self::$router;
 
+        }
+
+        public static function Redirect(string $_redirected_uri, string $_link) {
+            $redirected_uri = str_replace(' ', '', $_redirected_uri);
+            $link = str_replace(' ', '', $_link);
+
+            self::GetObject()->redirectMap[$redirected_uri] = $link;
         }
         
         public static function New($uri, $_action) {

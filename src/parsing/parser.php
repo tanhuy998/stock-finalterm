@@ -14,4 +14,16 @@
 
             return $uri;
         }
+
+        public static function ParseInitURI(string $_uri) {
+            $uri = str_replace(SUB_PATH_DOMAIN_NAME, '', $_uri);
+
+            $pattern = '/\([a-zA-Z0-9]+\)/';
+
+            if (preg_match($pattern,$uri,$matches)) {
+                
+            }
+
+            else return $uri;
+        }
     }

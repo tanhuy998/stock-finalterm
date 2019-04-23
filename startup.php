@@ -6,9 +6,12 @@
     
     Router::Routes()->Add('test/', function ($data) {
         var_dump($data);
-    })->SetRedirect('new/');
+
+    });
 
     Router::Routes()->Add('new/','TestController:Test');
+
+    Router::Redirect('test/', 'new/');
 
     //print_r($arr);
     // echo Router::Routes()->Exist('/foo');
