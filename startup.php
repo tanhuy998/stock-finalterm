@@ -11,16 +11,16 @@
     Router::Routes()->Add('/con','TestController:Test');
 
     //print_r($arr);
-    echo Router::Routes()->Exist('/foo');
+    // echo Router::Routes()->Exist('/foo');
 
-    echo Parser::ParseUri('/abc?a');
+    // echo Parser::ParseUri('/abc?a');
 
     $request = [
-        'uri' => '/con',
+        'uri' => '/iuopo',
         'data' => '1234',
     ];
 
-    Router::GetObject()->Render($request);
+    Router::GetObject()->Map($request);
 
     //echo '<br>'.microtime();
 

@@ -38,31 +38,30 @@
 
         }
 
-        public function Render(array $_request) {
+        public function Map(array $_request) {
             $uri = $_request['uri'];
             $request_data = $_request['data'];
 
             if ($this->ExistsRoute($uri)) {
-                $route = $this->routes;
+                $routes = $this->routes;
                 //
-                var_dump($uri);
-                $route->$uri($request_data);    
+                //var_dump($uri);
+                $routes->$uri($request_data);    
             }
-            //else return redirect('404');
+            else return $this->redirectHttpCode('404');
         }
 
-        public function Redirect($_uri) {
-            $error_list = include('http_status.php');
+        private function RedirectHttpCode($_code) {
+            $supported_respone_code = include('http_status.php');
 
-            if (isset($error_list[$_uri])) {
-                $show_error = $error_list[$_uri];
+            if (isset($supported_respone_code[$_code])) {
+                $code = intval($_code);
+                http_response_code($code);
 
-                $show_error();
+                echo 1;
             }
-
-            $redirect_url = DOMAIN_NAME.$_uri;
-
-            header('Location: '.$redirect_url);
+            
+            return false;
         }
 
         private function ExistsRoute(string $_uri):bool {

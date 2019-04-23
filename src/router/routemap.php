@@ -37,7 +37,7 @@
             if ($this->Exist($uri)) {
                 $route = $this->map[$uri];
 
-                $route->Load($args);
+                $route->Render($args);
             }
         }
 

@@ -55,7 +55,7 @@
         
         }
 
-        public function Load($_args) {
+        public function Render($_args) {
 
             if (!isset($this->meta['Controller'])) {
 
