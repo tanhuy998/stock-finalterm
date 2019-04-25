@@ -22,6 +22,28 @@
 
         public function SetMiddleware($_middleware) {
 
+            if (is_string($_middleware)) {
+                $is_single_middleware = strpos($_middleware,'-');
+
+                if ($is_single_middleware === false) {
+                    $this->meta['Middleware_exec'] = 'single';
+
+                    $this->middleware = $_middleware;
+                }
+                else {
+                    $middleware_queue = explode('-',$_middleware);
+
+                    $this->meta['Middleware_exec'] = 'queue';
+                    $this->middleware = $middleware_queue;
+                }
+
+            }
+
+            if (is_callable($_middleware)) {
+                $this->meta['Middleware_exec'] = 'anonymous';
+                $this->middleware = $_middleware;
+            }
+
             return $this;
         }
 
@@ -91,7 +113,7 @@
                 $method = $this->meta['Method'];
                 if (is_callable($method)) {
 
-                    $this->InvokeAnonymousMethod($_args);
+                    $this->InvokeAnonymousMethod($method ,$_args);
                     //$method($args);
                     //echo 'true';
                 }
@@ -102,10 +124,10 @@
 
         }
 
-        private function InvokeAnonymousMethod($_args) {
-            $method = $this->meta['Method'];
+        private function InvokeAnonymousMethod($_method, $_args) {
+            //$method = $this->meta['Method'];
 
-            $func_reflector = new ReflectionFunction($method);
+            $func_reflector = new ReflectionFunction($_method);
 
             $paramNum = $func_reflector->GetNumberOfParameterS();
 
@@ -142,25 +164,25 @@
 
         private function LoadMiddleware($_args) {
             $middleware = $this->middleware;
+            $middleware_exec_method;
 
-            if (!isset($middleware)) {
-                return;
-            }
+            if (isset($middleware)) {
+                $middleware_exec_method = $this->meta['Middleware_exec'];
 
-            if (is_callable($middleware)) {
-                $this->InvokeAnonymousMethod($_args);
-            }
-
-            if (is_string($middleware)) {
-                $middleware_list = explode(',',$middleware);
-
-                foreach ($middleware_list as $middleware) {
-
-                    $mid = new $middleware();
-
-                    $mid->Invoke($_args);
+                switch ($middleware_exec_method) {
+                    case 'single':
+                        $this->InvokeSingleMiddlewareClass($middleware, $_args);
+                        break;
+                    case 'queue':
+                        break;
+                    case 'anonymous':
+                        $this->InvokeAnonymousMethod($middleware, $_args);
+                        break;
+                    default :
+                        break;
                 }
             }
+
         }
 
         public static function ActionType($_type) {
@@ -170,4 +192,18 @@
             return false;
         }
 
+        private function InvokeSingleMiddlewareClass($_middleware, $_args) {
+            $method_reflector = new ReflectionMethod($_middleware, 'Invoke');
+
+            $middleware = new $_middleware();
+
+            $paramNum = $method_reflector->GetNumberOfParameters();
+
+            if ($paramNum > 0) {
+                $method_reflector->InvokeArgs($middleware, $_args);
+            }
+            else {
+                $method_reflector->Invoke();
+            }
+        }
     }

@@ -6,7 +6,7 @@
             $this->passStatus = true;
         }
 
-        public function Invoke() {
+        public function Invoke($_args = null) {
 
         }
 

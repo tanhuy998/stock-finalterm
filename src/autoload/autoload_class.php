@@ -35,10 +35,10 @@
                 //var_dump($class_map);
                 //$class_map = $class_map->$map;
 
-                $loaded_class = $class_map[$_className];
+                $Class_dir = $class_map[$_className];
 
-                if ($loaded_class !== null) {
-                    include($loaded_class);
+                if ($Class_dir !== null) {
+                    include($Class_dir);
                 }
             });
         }

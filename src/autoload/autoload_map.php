@@ -9,6 +9,6 @@
         'RouteMap' => $base_path.'\src\router\routemap.php',
         'Route' => $base_path.'\src\router\route.php',
         'Parser' => $base_path.'\src\parsing\parser.php',
-        'Middleware' => $base_path.'\src\middleware.php',
-        'TestMiddleWare' => $base_path.'MVC\middleware\testmiddleware.php',
+        'Middleware' => $base_path.'\src\middleware\middleware.php',
+        'TestMiddleware' => $base_path.'\MVC\middleware\testmiddleware.php',
     ];
