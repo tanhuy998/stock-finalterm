@@ -106,7 +106,10 @@
                 $this->Redirect($redirect_link);
             }
 
-            $this->LoadMiddleware($_args);
+            $is_pass_middleware = $this->LoadMiddleware($_args);
+            if (!$is_pass_middleware) {
+                return ;
+            }
 
             if (!isset($this->meta['Controller'])) {
 
@@ -162,27 +165,34 @@
             //}
         }
 
-        private function LoadMiddleware($_args) {
+        private function LoadMiddleware($_args):bool {
             $middleware = $this->middleware;
             $middleware_exec_method;
+
+            $status;
 
             if (isset($middleware)) {
                 $middleware_exec_method = $this->meta['Middleware_exec'];
 
                 switch ($middleware_exec_method) {
                     case 'single':
-                        $this->InvokeSingleMiddlewareClass($middleware, $_args);
+                        $status = $this->InvokeSingleMiddlewareClass($middleware, $_args);
                         break;
                     case 'queue':
                         break;
                     case 'anonymous':
-                        $this->InvokeAnonymousMethod($middleware, $_args);
+                        $status = $this->InvokeAnonymousMethod($middleware, $_args);
                         break;
                     default :
                         break;
                 }
             }
 
+            if ($status === null) {
+                return true;
+            }
+            
+            return $status;
         }
 
         public static function ActionType($_type) {
@@ -192,7 +202,7 @@
             return false;
         }
 
-        private function InvokeSingleMiddlewareClass($_middleware, $_args) {
+        private function InvokeSingleMiddlewareClass($_middleware, $_args):bool {
             $method_reflector = new ReflectionMethod($_middleware, 'Invoke');
 
             $middleware = new $_middleware();
@@ -205,5 +215,7 @@
             else {
                 $method_reflector->Invoke();
             }
+
+            return $middleware->CanPass();
         }
     }
