@@ -12,6 +12,7 @@
         private static $router;
 
         private $routes;
+        private $home;
         private $redirectMap;
 
         //private static $router;
@@ -62,7 +63,12 @@
                     header('Location: '.SUB_PATH_DOMAIN_NAME.$redirect_link);
                 }
             }
+            
+            if ($uri === '') {
+                $uri = $this->home;
+            }
 
+            
             if ($this->ExistsRoute($uri)) {
                 $routes = $this->routes;
                 //
@@ -115,6 +121,14 @@
 
         public static function Routes() {
             return self::GetObject()->routes;
+        }
+
+        public static function SetHome(string $_route) {
+            $router = self::GetObject();
+
+            if ($router->ExistsRoute($_route)) {
+                $router->home = $_route;
+            }
         }
 
     }

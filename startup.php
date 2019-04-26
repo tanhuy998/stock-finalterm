@@ -1,15 +1,14 @@
 <?php 
     //echo microtime();
+    session_start();
     require_once 'src/define.php';
     require_once 'src/autoload/autoload.php';
     
     
-    Router::Routes()->Add('test/', function ($data) {
-        var_dump($data);
 
-    })->SetMiddleware('TestMiddleware');
+    Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authenticator');
 
-    Router::Routes()->Add('new/','TestController:Test');
+    //Router::Routes()->Add('new/','TestController:Test');
 
     //Router::Redirect('test/', 'new/');
 
@@ -17,6 +16,8 @@
     // echo Router::Routes()->Exist('/foo');
     
     // echo Parser::ParseUri('/abc?a');
+
+    Router::SetHome('home/');
 
     $request = [];
     //echo $_SERVER['REQUEST_URI'];
@@ -26,6 +27,7 @@
     //echo $request['uri'];
     Router::GetObject()->Map($request);
 
+    session_abort();
     //echo '<br>'.microtime();
 
 
