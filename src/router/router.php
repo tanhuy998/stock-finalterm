@@ -74,7 +74,7 @@
                 //
                 //var_dump($uri);
                 //echo $uri;
-                $routes->$uri($request_data);    
+                return $routes->$uri();    
             }
             else return $this->redirectHttpCode('404');
         }

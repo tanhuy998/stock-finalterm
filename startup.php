@@ -22,10 +22,12 @@
     $request = [];
     //echo $_SERVER['REQUEST_URI'];
     $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
-    $request['data'] = '123';
+    $request['data'][] = '123';
 
     //echo $request['uri'];
-    Router::GetObject()->Map($request);
+    $render_obj = Router::GetObject()->Map($request);
+
+    $render_obj->Render($request['data']);
 
     session_abort();
     //echo '<br>'.microtime();
