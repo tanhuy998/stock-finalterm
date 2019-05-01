@@ -26,4 +26,20 @@
 
             else return $uri;
         }
+
+        public static function BindingRequest() {
+            $request = [];
+            $server = $_SERVER;
+
+            $request['uri'] = self::ParseRequestUri($server['REQUEST_URI']);
+            
+            if ($server['REQUEST_METHOD'] == 'GET') {
+                $request['data'] = $_GET;
+            }
+            else if ($server['REQUEST_METHOD'] == 'POST') {
+                $request['data'] = $_POST;
+            }
+
+            return $request;
+        }
     }

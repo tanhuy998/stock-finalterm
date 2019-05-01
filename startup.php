@@ -6,7 +6,7 @@
     
     
 
-    Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authenticator');
+    Router::Routes()->Add('home/', 'HomeController:Index');//->SetMiddleware('Authenticator');
 
     //Router::Routes()->Add('new/','TestController:Test');
 
@@ -19,10 +19,10 @@
 
     Router::SetHome('home/');
 
-    $request = [];
+    $request = Parser::BindingRequest();
     //echo $_SERVER['REQUEST_URI'];
-    $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
-    $request['data'][] = '123';
+    // $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
+    // $request['data'][] = '123';
 
     //echo $request['uri'];
     $render_obj = Router::GetObject()->Map($request);

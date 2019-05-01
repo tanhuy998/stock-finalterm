@@ -4,6 +4,7 @@
     $base_path = dirname(dirname(__DIR__));
     
     return [
+        'Model' => $base_path.'\MVC\model\model.php',
         'HomeController' => $base_path.'\MVC\controller\HomeController.php',
         'Router' => $base_path.'\src\router\router.php',
         'RouteMap' => $base_path.'\src\router\routemap.php',

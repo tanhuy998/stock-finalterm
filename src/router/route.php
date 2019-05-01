@@ -169,7 +169,7 @@
             $middleware = $this->middleware;
             $middleware_exec_method;
 
-            $status;
+            $status = true;
 
             if (isset($middleware)) {
                 $middleware_exec_method = $this->meta['Middleware_exec'];
@@ -186,10 +186,6 @@
                     default :
                         break;
                 }
-            }
-
-            if ($status === null) {
-                return true;
             }
             
             return $status;
