@@ -4,3 +4,7 @@
     define('VIEW','\public\view');
     define('ROUTE','\route');
     define('SUB_PATH_DOMAIN_NAME','/stock/');
+    
+    define('DOMAIN_NAME', '192.168.1.94');
+
+    define('DOMAIN', DOMAIN_NAME.SUB_PATH_DOMAIN_NAME);

@@ -6,16 +6,21 @@
             //echo 'fuck yeah'.$_temp;
 
             //echo __DIR__;
-            $db = new Model('TRADER_STOCK','1234','orcl');
+            // $db = new Model('TRADER_STOCK','1234','orcl');
 
-            $sql = 'INSERT INTO ACCOUNT (ID,ACCOUNT_NAME,PASSWORD) VALUES (2,\'trade2\',\'123\')';
+            // //$sql = 'INSERT INTO ACCOUNT (ID,ACCOUNT_NAME,PASSWORD) VALUES (2,\'trade2\',\'123\')';
             
-            //$db->Insert($sql);
+            // //$db->Insert($sql);
+            // $acc_model = new AccountModel();
 
-            $sql = 'SELECT * FROM ACCOUNT';
+            // $acc_model->InsertSingle('name', '1234');
 
-            $res = $db->Select($sql);
+            // $sql = 'SELECT * FROM ACCOUNT';
 
-            var_dump($res);
+            // $res = $db->Select($sql);
+
+            // var_dump($res);
+
+            echo 'home';
         }
     }

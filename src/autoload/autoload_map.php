@@ -4,6 +4,8 @@
     $base_path = dirname(dirname(__DIR__));
     
     return [
+        'Account' => $base_path.'\lib\account.php',
+        'AccountModel' => $base_path.'\MVC\model\accountmodel.php',
         'Model' => $base_path.'\MVC\model\model.php',
         'HomeController' => $base_path.'\MVC\controller\HomeController.php',
         'Router' => $base_path.'\src\router\router.php',
@@ -11,5 +13,5 @@
         'Route' => $base_path.'\src\router\route.php',
         'Parser' => $base_path.'\src\parsing\parser.php',
         'Middleware' => $base_path.'\src\middleware\middleware.php',
-        'Authenticator' => $base_path.'\MVC\middleware\authenticator.php',
+        'Authentication' => $base_path.'\MVC\middleware\authentication.php',
     ];

@@ -76,10 +76,11 @@
                 //echo $uri;
                 return $routes->$uri();    
             }
-            else return $this->redirectHttpCode('404');
+            else return null;
+            //else return $this->redirectHttpCode('404');
         }
 
-        private function RedirectHttpCode($_code) {
+        public static function RedirectHttpCode($_code) {
             $supported_respone_code = include('http_status.php');
 
             if (isset($supported_respone_code[$_code])) {

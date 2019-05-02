@@ -11,18 +11,41 @@
             }
         }
 
-        public function Insert(string $_sql) {
-            $resource = oci_parse($this->conn, $_sql);
-            oci_execute($resource);
+        public function __destruct() {
+            if ($this->conn) {
+                oci_close($this->conn);
+            }
         }
 
-        public function Select(string $_sql) {
+        private function BindValues($stid , array $_binding_pairs) {
+            foreach ($_binding_pairs as $key => $value) {
+                echo $key.' '.$value.'<br>';
+                oci_bind_by_name($stid,$key,$_binding_pairs[$key]);
+            }
+
+            return $stid;
+        }
+
+        public function Insert(string $_sql, array $_binding_pairs) {
             $resource = oci_parse($this->conn, $_sql);
+
+            $resource = $this->BindValues($resource, $_binding_pairs);
+
+            //var_dump($resource);
+            return oci_execute($resource);
+        }
+
+        public function Select(string $_sql, array $_binding_pairs = []) {
+            $resource = oci_parse($this->conn, $_sql);
+
+            $resource = $this->BindValues($resource, $_binding_pairs);
+            
             oci_execute($resource);
 
             $res = [];
-
+            //echo oci_num_rows($resource);
             while ($row = oci_fetch_assoc($resource)) {
+                //var_dump($row);
                 $res[] = $row;
             }
 

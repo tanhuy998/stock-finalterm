@@ -6,7 +6,7 @@
     
     
 
-    Router::Routes()->Add('home/', 'HomeController:Index');//->SetMiddleware('Authenticator');
+    Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
 
     //Router::Routes()->Add('new/','TestController:Test');
 
@@ -27,7 +27,13 @@
     //echo $request['uri'];
     $render_obj = Router::GetObject()->Map($request);
 
-    $render_obj->Render($request['data']);
+    if ($render_obj !== null) {
+        $render_obj->Render($request['data']);
+    }
+    else {
+        Router::RedirectHttpCode('404');
+    }
+    
 
     session_abort();
     //echo '<br>'.microtime();
