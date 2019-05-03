@@ -20,6 +20,11 @@
 	<div id="form">
 		<form method="POST" action="<?php ECHO 'http://'.DOMAIN.'home/'?>" >
 		<table>
+			<?php 
+				if (isset($_GET['error'])) {
+					echo'<tr><td colspan="2" id="signup">wrong user</td></tr>';
+				}
+			?>
 			<tr>
 				<td>Username</td>
 				<td><input type="text" name="username"></td>
@@ -31,6 +36,7 @@
 			<tr>
 				<td colspan="2" id="button"><input type="submit" value="Enter" name="" ></td>
 			</tr>
+			
 			<tr>
 				<td colspan="2" id="signup"><a href="" target="_blank">SIGN UP</a></td>
 			</tr>

@@ -82,7 +82,7 @@
         
         }
 
-        private function Redirect($_link) {
+        public static function Redirect($_link) {
 
             if (filter_var($_link, FILTER_VALIDATE_URL) === true) {
                 header('Location: '.$_link, true);
@@ -103,12 +103,7 @@
             if (isset($this->meta['Redirect'])) {
                 $redirect_link = $this->meta['Redirect'];
 
-                $this->Redirect($redirect_link);
-            }
-
-            $is_pass_middleware = $this->LoadMiddleware($_args);
-            if (!$is_pass_middleware) {
-                return ;
+                self::Redirect($redirect_link);
             }
 
             if (!isset($this->meta['Controller'])) {
@@ -165,11 +160,11 @@
             //}
         }
 
-        private function LoadMiddleware($_args):bool {
+        public function LoadMiddleware($_args) {
             $middleware = $this->middleware;
             $middleware_exec_method;
 
-            $status = true;
+            $status = ['status' => true];
 
             if (isset($middleware)) {
                 $middleware_exec_method = $this->meta['Middleware_exec'];
@@ -198,7 +193,7 @@
             return false;
         }
 
-        private function InvokeSingleMiddlewareClass($_middleware, $_args):bool {
+        private function InvokeSingleMiddlewareClass($_middleware, $_args) {
             $method_reflector = new ReflectionMethod($_middleware, 'Invoke');
 
             $middleware = new $_middleware();
@@ -212,6 +207,6 @@
                 $method_reflector->Invoke();
             }
 
-            return $middleware->CanPass();
+            return $middleware->GetMetaData();
         }
     }

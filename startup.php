@@ -24,12 +24,23 @@
     //echo $_SERVER['REQUEST_URI'];
     // $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
     // $request['data'][] = '123';
-
     //echo $request['uri'];
-    $render_obj = Router::GetObject()->Map($request);
+    //echo $request['uri'];
+    $route = Router::GetObject()->Map($request);
 
-    if ($render_obj !== null) {
-        $render_obj->Render($request['data']);
+    if ($route !== null) {
+        $route_stat = $route->LoadMiddleWare($request['data']);
+
+        if (isset($route_stat['redirect'])) {
+            $link = $route_stat['redirect'];
+
+            Route::Redirect($link);
+        }
+        else {
+            if ($route_stat['status'] === true) {
+                $route->Render($request['data']);
+            }
+        }
     }
     else {
         Router::RedirectHttpCode('404');

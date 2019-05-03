@@ -3,12 +3,18 @@
 
         public static function ParseRequestUri(string $_uri) {
             $uri = str_replace(SUB_PATH_DOMAIN_NAME, '', $_uri);
-
+            //echo $uri;
             if (strpos($uri, '?') > 0) {
-                $arr = explode('?', $_uri);
-
+                $arr = explode('?', $uri);
+                
                 $str_route = $arr[0];
 
+                $length = strlen($str_route);
+
+                //if (substr($str_route, $length -1) != '/') {
+                if ($str_route[$length-1] != '/') {
+                    $str_route = $str_route.'/';
+                }
                 return $str_route;
             }
 

@@ -25,7 +25,9 @@
         public function GetByUserName(string $_username) {
             $sql = 'SELECT * FROM ACCOUNT WHERE ACCOUNT.ACCOUNT_NAME = \''.$_username.'\'';
 
-            //$binding_pairs = [':account' => $_username];
+            //$sql = 'SELECT * FROM ACCOUNT WHERE ACCOUNT.ACCOUNT_NAME = :account';
+            
+            $binding_pairs = [':account' => $_username];
 
             $resource = $this->Select($sql);
 

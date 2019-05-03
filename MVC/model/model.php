@@ -19,8 +19,8 @@
 
         private function BindValues($stid , array $_binding_pairs) {
             foreach ($_binding_pairs as $key => $value) {
-                echo $key.' '.$value.'<br>';
-                oci_bind_by_name($stid,$key,$_binding_pairs[$key]);
+                //echo $key.' '.$value.'<br>';
+                oci_bind_by_name($stid, $key, $_binding_pairs[$key]);
             }
 
             return $stid;
@@ -48,7 +48,7 @@
                 //var_dump($row);
                 $res[] = $row;
             }
-
+            
             return $res;
         }
     }

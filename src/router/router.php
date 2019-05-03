@@ -76,8 +76,26 @@
                 //echo $uri;
                 return $routes->$uri();    
             }
-            else return null;
+            else return $this->TryMap($uri);
             //else return $this->redirectHttpCode('404');
+        }
+
+        private function TryMap(string $_uri) {
+            $length = strlen($_uri);
+
+            if ($_uri[$length-1] != '/') {
+                $_uri = $_uri.'/';
+                
+                if ($this->ExistsRoute($_uri)) {
+                    $routes = $this->routes;
+             
+                    return $routes->$_uri();    
+                }
+
+                return null;
+            }
+            
+            return null;
         }
 
         public static function RedirectHttpCode($_code) {
