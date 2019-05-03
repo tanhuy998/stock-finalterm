@@ -14,7 +14,7 @@
 
             $account = $model->GetByUserName($_username);
 
-            var_dump($account);
+            //var_dump($account);
 
             if (isset($account)) {
                 $hash_pass = $account['PASSWORD'];

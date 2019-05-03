@@ -7,6 +7,7 @@
     
 
     Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
+    Router::Routes()->Add('login/', 'LoginController:Index');
 
     //Router::Routes()->Add('new/','TestController:Test');
 
@@ -17,7 +18,7 @@
     
     // echo Parser::ParseUri('/abc?a');
 
-    Router::SetHome('home/');
+    Router::SetHome('login/');
 
     $request = Parser::BindingRequest();
     //echo $_SERVER['REQUEST_URI'];

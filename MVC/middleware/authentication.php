@@ -6,7 +6,15 @@
         }
 
         public function Invoke($args = null) {
-            $acc = new Account('name','1234');
+            $username;
+            $password;
+
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $username = $_POST['username'];
+                $password = $_POST['password'];
+            }
+
+            $acc = new Account($username,$password);
 
 
             if ($acc->IsValid()) {
