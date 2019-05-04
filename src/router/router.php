@@ -125,7 +125,7 @@
 
         }
 
-        public static function Redirect(string $_redirected_uri, string $_link) {
+        public static function SetRedirect(string $_redirected_uri, string $_link) {
             $redirected_uri = str_replace(' ', '', $_redirected_uri);
             $link = str_replace(' ', '', $_link);
 

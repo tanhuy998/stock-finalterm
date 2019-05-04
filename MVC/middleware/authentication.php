@@ -10,81 +10,121 @@
         }
 
         public function Invoke($args = null) {
-            $username;
-            $password;
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                $username = $_POST['username'];
-                $password = $_POST['password'];
-
-                $acc = new Account($username,$password);
-
-                if ($acc->IsValid()) {
-                    $this->passStatus = true;
-                    //echo 'pass';
-                    $data = [];
-
-                    $this->PlaceToken($data);
-
-                    $this->passStatus = true;
-                    $this->meta['status'] = $this->passStatus;
-                    return $this->meta;
-                }
-                else {
-                    echo 'wrong user';
-                    $this->meta['status'] = $this->passStatus;
-                    $this->meta['redirect'] = 'login?error=1';
-
-                    return $this->meta;
-                }
+                return $this->FormInputAuthenticate();
             }
             else {
-                $token_data = $this->TokenAuthenticate();
-
-                if (!isset($token_data)) {
-
-                    $this->meta['status'] = $this->passStatus;
-                    $this->meta['redirect'] = 'login/';
-
-                    return null;
-                }
-                else {
-
-                }
+                return $this->TokenAuthenticate();
             }
-        } 
 
-        public function TokenAuthenticate() {
+        }
+        
+        private function FormInputAuthenticate() {
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+
+            $acc = new Account($username,$password);
+
+            if ($acc->IsValid()) {
+                $this->passStatus = true;
+                    //echo 'pass';
+                $token = $this->GenerateToken($acc->GetId() ,$username);
+
+                $this->PlaceToken($token);
+
+                $this->passStatus = true;
+                $this->meta['status'] = $this->passStatus;
+                return $this->meta;
+            }
+            else {
+                echo 'wrong user';
+                $this->meta['status'] = $this->passStatus;
+                $this->meta['redirect'] = 'login?error=1';
+
+                return $this->meta;
+            }
+        }
+
+        private function TokenAuthenticate() {
             $token = $this->GetToken();
+            $toke_data;
 
             if (isset($token)) {
-                $data = $this->ParseToken($token);
+                $token_data = $this->ParseToken($token);
                 
-                return $data;
+                //return $data;
             }
-            return null;
+            
+            //$token_data = $this->TokenAuthenticate();
+            if (!isset($token_data)) {
+
+                $this->passStatus = false;
+
+                $this->meta['status'] = $this->passStatus;
+                $this->meta['redirect'] = 'login/';
+                
+                return $this->meta;
+            }
+            else {
+                $model = new AccountModel();
+
+                $username = $token_data['username'];
+                $id = $token_data['id'];
+
+                $account = $model->GetByUsername($username);
+                
+                if ($account != null) {
+                    if ($id == $account['ID']) {
+                        $this->passStatus = true;
+                        $this->meta['status'] = $this->passStatus;
+                        //$this->meta['redirect'] = 'home/';
+                        //echo 'acount';
+                        return $this->meta;
+                    }
+                }
+                else {
+                    $this->passStatus = false;
+
+                    $this->meta['status'] = $this->passStatus;
+                    $this->meta['redirect'] = 'login?error=2';
+                }
+                return $this->meta;
+            }
         }
 
         private function GetToken() {
-            $token = $_COOKIE['token'];
 
-            if (isset($token)) {
+            if (isset($_COOKIE['token'])) {
 
-                return $token;
+                if ($_COOKIE['token'] != '') return $_COOKIE['token'];
             }
 
             return null;
         }
 
-        private function PlaceToken(array $_data) {
-
+        private function PlaceToken(string $_token) {
+            setcookie('token', $_token, time() + (60*5), '/');
         }
 
         private function ParseToken($_token): array {
             $return_data = [];
 
+            $token_lvl1 = base64_decode($_token);
+
+            $arr = explode('@-@', $token_lvl1);
+
+            $return_data['id'] = convert_uudecode($arr[1]);
+            $return_data['username'] = convert_uudecode($arr[0]);
+
             return $return_data;
         }
 
+        private function GenerateToken($_id, $_username) {
+            $token_lvl1 = convert_uuencode($_username).'@-@'.convert_uuencode($_id);
 
+            $token_lvl2 = base64_encode($token_lvl1);
+
+            return $token_lvl2;
+        }
     }

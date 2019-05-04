@@ -9,6 +9,10 @@
             $this->valid = $this->Authenticate($_username, $_password);
         }
 
+        public function GetId() {
+            return $this->id;
+        }
+
         private function Authenticate(string $_username, string $_password): bool {
             $model =  new AccountModel();
 
@@ -20,12 +24,6 @@
                 $hash_pass = $account['PASSWORD'];
                 $hash_pass = str_replace(' ', '', $hash_pass);
 
-                //$hash_pass = "$hash_pass";
-
-                //var_dump($hash_pass);
-
-                //echo $hash_pass;
-                //echo password_verify($_password, $hash_pass);
                 if (password_verify($_password, $hash_pass)) {
                     $this->id = $account['ID'];
                     
