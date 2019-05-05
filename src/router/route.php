@@ -174,6 +174,7 @@
                         $status = $this->InvokeSingleMiddlewareClass($middleware, $_args);
                         break;
                     case 'queue':
+                        $status = $this->InvokeMiddlewareSequence($middleware, $_args);
                         break;
                     case 'anonymous':
                         $status = $this->InvokeAnonymousMethod($middleware, $_args);
@@ -193,6 +194,37 @@
             return false;
         }
 
+        private function InvokeMiddlewareSequence(array $_queue, $_args) {
+            foreach ($_queue as $middleware) {
+                // $method_reflector = new ReflectionMethod($middleware_name, 'Invoke');
+
+                // $middleware = new $middleware_name();
+
+                // $paramNum = $method_reflector->GetNumberOfParameters();
+
+                // if ($paramNum > 0) {
+                //     $method_reflector->InvokeArgs($middleware, $_args);
+                // }
+                // else {
+                //     $method_reflector->Invoke();
+                // }
+
+                $metaData = $this->InvokeSingleMiddlewareClass($middleware);
+
+                if (isset($metaData['redirect'])) return $metaData;
+
+                if ($metaData['status'] === false) {
+                    $metaData['meta'] = [
+                        'block_at' => $middleware_name,
+                        'message' => '',
+                        'data' => ''
+                    ];
+
+                    return $metaData;
+                } 
+            }
+        }
+
         private function InvokeSingleMiddlewareClass($_middleware, $_args) {
             $method_reflector = new ReflectionMethod($_middleware, 'Invoke');
 
@@ -204,7 +236,7 @@
                 $method_reflector->InvokeArgs($middleware, $_args);
             }
             else {
-                $method_reflector->Invoke();
+                $method_reflector->Invoke($middleware);
             }
 
             return $middleware->GetMetaData();

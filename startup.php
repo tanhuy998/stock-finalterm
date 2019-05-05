@@ -8,6 +8,7 @@
 
     Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
     Router::Routes()->Add('login/', 'LoginController:Index');
+    Router::Routes()->Add('share-trading/', 'transactionController')->SetMiddleware('TransactionSession-Authentication-TransactionSesstion');
     Router::Routes()->add('logout/', function() {
         setcookie('token', '', 0, '/');
         
@@ -67,6 +68,9 @@
                 //echo 6;
                 $route->Render($request['data']);
             }
+            else {
+
+            }
         }
     }
     else {
@@ -74,7 +78,7 @@
     }
     
 
-    session_abort();
+    //session_abort();
     //echo '<br>'.microtime();
 
 
