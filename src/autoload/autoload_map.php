@@ -4,6 +4,9 @@
     $base_path = dirname(dirname(__DIR__));
     
     return [
+        'TransactionShareController' => $base_path.'\MVC\model\transactionsharecontroller.php',
+        'TransactionShareModel' => $base_path.'\MVC\model\transactionsharemodel.php',
+        'HomeView' => $base_path.'\MVC\view\home.php',
         'SigninView' => $base_path.'\MVC\view\signin.php',
         'LoginController' => $base_path.'\MVC\controller\logincontroller.php',
         'Account' => $base_path.'\lib\account.php',

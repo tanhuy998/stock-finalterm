@@ -51,7 +51,7 @@
             $toke_data;
 
             if (isset($token)) {
-                $token_data = $this->ParseToken($token);
+                $token_data = self::ParseToken($token);
                 
                 //return $data;
             }
@@ -107,7 +107,7 @@
             setcookie('token', $_token, time() + (60*5), '/');
         }
 
-        private function ParseToken($_token): array {
+        public static function ParseToken($_token): array {
             $return_data = [];
 
             $token_lvl1 = base64_decode($_token);

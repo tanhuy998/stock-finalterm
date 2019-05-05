@@ -26,29 +26,29 @@
             return $stid;
         }
 
-        public function Insert(string $_sql, array $_binding_pairs) {
+        public function Insert(string $_sql, array $_binding_pairs = []) {
             $resource = oci_parse($this->conn, $_sql);
 
-            $resource = $this->BindValues($resource, $_binding_pairs);
-
+            $res = $this->BindValues($resource, $_binding_pairs);
+            
             //var_dump($resource);
-            return oci_execute($resource);
+            return oci_execute($res);
         }
 
         public function Select(string $_sql, array $_binding_pairs = []) {
             $resource = oci_parse($this->conn, $_sql);
 
-            $resource = $this->BindValues($resource, $_binding_pairs);
+            $res = $this->BindValues($resource, $_binding_pairs);
             
-            oci_execute($resource);
+            oci_execute($res);
 
-            $res = [];
+            $return_val = [];
             //echo oci_num_rows($resource);
-            while ($row = oci_fetch_assoc($resource)) {
+            while ($row = oci_fetch_assoc($res)) {
                 //var_dump($row);
-                $res[] = $row;
+                $return_val[] = $row;
             }
             
-            return $res;
+            return $return_val;
         }
     }

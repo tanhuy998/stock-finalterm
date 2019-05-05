@@ -13,6 +13,25 @@
         
         Route::Redirect('home/');
     });
+
+    Router::Routes()->Add('temp/', function() {
+        // $db = new Model('TRADER_STOCK','1234','orcl');
+
+        // $sql = 'INSERT INTO TRANSACTION_TYPE (TYPE_NAME) VALUES (\'out\')';
+            
+        // //$db->Insert($sql);
+
+        // $model = new Model('TRADER_STOCK', '1234', 'orcl');
+
+        // $model->Insert($sql);
+
+        //$res = $db->Select($sql);
+
+        $tran = new TransactionShareModel();
+        $id = $tran->GetByAccountID('107');
+
+        var_dump($id);
+    });
     //Router::Routes()->Add('signin/', 'SigninController:Index');
 
     //Router::Routes()->Add('new/','TestController:Test');

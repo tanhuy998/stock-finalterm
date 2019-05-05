@@ -21,6 +21,8 @@
 
             // var_dump($res);
             //echo $_SERVER['SERVER_ADDR'];
-            echo 'home';
+            //echo 'home';
+
+            $view = new HomeView();
         }
     }
