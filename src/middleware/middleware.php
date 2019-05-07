@@ -9,7 +9,7 @@
             $this->meta['status'] = $this->passStatus; 
         }
 
-        public function Invoke($_args = null) {
+        public function Invoke($_args) {
 
         }
 

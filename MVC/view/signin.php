@@ -1,6 +1,6 @@
 <?php
 	class SigninView {
-
+		
 	}
 ?>
 
@@ -18,7 +18,7 @@
 <body>
 	<div id="lable">SIGN IN</div>
 	<div id="form">
-		<form method="POST" action="<?php ECHO 'http://'.DOMAIN.'home/'?>" >
+		<form method="POST" action="<?php ECHO 'http://'.DOMAIN.$_GET['target']?>" >
 		<table>
 			<?php 
 				if (isset($_GET['error'])) {

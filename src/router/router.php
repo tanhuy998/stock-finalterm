@@ -48,7 +48,7 @@
             else return false;
         }
 
-        public function Map(array $_request) {
+        public function Map(array &$_request) {
             $uri = $_request['uri'];
             $request_data = $_request['data'];
 
@@ -66,6 +66,7 @@
             
             if ($uri === '') {
                 $uri = $this->home;
+                $_request['uri'] = $this->home;
             }
 
             
@@ -105,7 +106,7 @@
                 $code = intval($_code);
                 http_response_code($code);
 
-                echo '<h1>404</h1>';
+                echo $supported_respone_code[$_code];
             }
             
             return false;

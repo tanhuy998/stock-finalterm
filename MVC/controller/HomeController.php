@@ -2,7 +2,7 @@
 
     class HomeController {
 
-        public function Index() {
+        public function Index($_request) {
             //echo 'fuck yeah'.$_temp;
 
             //echo __DIR__;
@@ -22,7 +22,7 @@
             // var_dump($res);
             //echo $_SERVER['SERVER_ADDR'];
             //echo 'home';
-
+            //var_dump($_args);
             $view = new HomeView();
         }
     }

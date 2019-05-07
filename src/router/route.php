@@ -83,14 +83,14 @@
         }
 
         public static function Redirect($_link) {
-
+            //echo 1;
             if (filter_var($_link, FILTER_VALIDATE_URL) === true) {
                 header('Location: '.$_link, true);
                 exit();
             }
             else {
                 //echo SUB_PATH_DOMAIN_NAME.$_link;
-
+                //echo 2;
                 header('Location: '.SUB_PATH_DOMAIN_NAME.$_link);
                 //echo 1; 
                 //exit();
@@ -106,6 +106,7 @@
                 self::Redirect($redirect_link);
             }
 
+            //var_dump($_args);
             if (!isset($this->meta['Controller'])) {
 
                 $method = $this->meta['Method'];
@@ -129,12 +130,13 @@
 
             $paramNum = $func_reflector->GetNumberOfParameterS();
 
-            if ($paramNum != 0) {
-                $func_reflector->InvokeArgs($_args);
-            }
-            else {
-                $func_reflector->Invoke();
-            }
+            $func_reflector->Invoke($_args);
+            // if ($paramNum != 0) {
+            //     $func_reflector->InvokeArgs($_args);
+            // }
+            // else {
+            //     $func_reflector->Invoke();
+            // }
         }
 
         private function InvokeControllerMethod($_args) {
@@ -151,12 +153,13 @@
 
                 $paramNum = $method_reflector->GetNumberOfParameters();
 
-                if ($paramNum != 0) {
-                    $method_reflector->InvokeArgs($controller,$_args);
-                }
-                else {
-                    $method_reflector->Invoke($controller);
-                }
+                $method_reflector->Invoke($controller, $_args);
+                // if ($paramNum != 0) {
+                //     $method_reflector->InvokeArgs($controller,$_args);
+                // }
+                // else {
+                //     $method_reflector->Invoke($controller);
+                // }
             //}
         }
 
@@ -164,6 +167,7 @@
             $middleware = $this->middleware;
             $middleware_exec_method;
 
+            //var_dump($_args);       
             $status = ['status' => true];
 
             if (isset($middleware)) {
@@ -209,13 +213,13 @@
                 //     $method_reflector->Invoke();
                 // }
 
-                $metaData = $this->InvokeSingleMiddlewareClass($middleware);
+                $metaData = $this->InvokeSingleMiddlewareClass($middleware, $_args);
 
                 if (isset($metaData['redirect'])) return $metaData;
 
                 if ($metaData['status'] === false) {
                     $metaData['meta'] = [
-                        'block_at' => $middleware_name,
+                        'block_at' => $middleware,
                         'message' => '',
                         'data' => ''
                     ];
@@ -232,12 +236,13 @@
 
             $paramNum = $method_reflector->GetNumberOfParameters();
 
-            if ($paramNum > 0) {
-                $method_reflector->InvokeArgs($middleware, $_args);
-            }
-            else {
-                $method_reflector->Invoke($middleware);
-            }
+            $method_reflector->Invoke($middleware, $_args);
+            // if ($paramNum > 0) {
+            //     $method_reflector->InvokeArgs($middleware, $_args);
+            // }
+            // else {
+            //     $method_reflector->Invoke($middleware);
+            // }
 
             return $middleware->GetMetaData();
         }

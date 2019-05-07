@@ -5,13 +5,18 @@
             $this->passStatus = true;
         }
 
-        public function Invoke($_args = null) {
+        public function Invoke($_request) {
 
-            if (!isset($_SESSION['tran_sess'])) {
-                $acc_id = $_args['acc_id'];
+            if (isset($_SESSION['tran_sess'])) {
+                unset($_SESSION['tran_sess']);
+            }
+                var_dump($_request);
+                $args = $_request['data'];
+
+                $acc_id = $args['acc_id'];
                 $current_time = date('Y-m-d H:i:s');
-                $tran_type = $_args['tran_type'];
-                $produt_type = $_args['pro_type'];
+                $tran_type = $args['tran_type'];
+                $produt_type = $args['pro_type'];
 
                 $data = [
                     'acc_id' => $acc_id,
@@ -19,11 +24,10 @@
                     'tran_type' => $tran_type,
                     'pro_type' => $produt_type
                 ];
-            }
-            else {
-                unset($_SESSION['tran_sess']);
-            }
-            
+
+            echo 'session';
+            $this->meta['status'] = $this->passStatus;
+            //$this->meta['redirect']
             return $this->meta;
         }
 

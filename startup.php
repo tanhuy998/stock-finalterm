@@ -8,8 +8,8 @@
 
     Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
     Router::Routes()->Add('login/', 'LoginController:Index');
-    Router::Routes()->Add('share-trading/', 'transactionController')->SetMiddleware('TransactionSession-Authentication-TransactionSesstion');
-    Router::Routes()->add('logout/', function() {
+    Router::Routes()->Add('share-trading/', 'transactionController')->SetMiddleware('TransactionSession-Authentication');
+    Router::Routes()->add('logout/', function($_request) {
         setcookie('token', '', 0, '/');
         
         Route::Redirect('home/');
@@ -55,18 +55,18 @@
     $route = Router::GetObject()->Map($request);
     //echo 5;
     if ($route !== null) {
-        $route_stat = $route->LoadMiddleWare($request['data']);
+        $route_stat = $route->LoadMiddleWare($request);
         //echo 4;
         if (isset($route_stat['redirect'])) {
             $link = $route_stat['redirect'];
-            //echo 1;
+            //echo $link;
             Route::Redirect($link);
         }
         else {
             //echo 7;
             if ($route_stat['status'] === true) {
                 //echo 6;
-                $route->Render($request['data']);
+                $route->Render($request);
             }
             else {
 

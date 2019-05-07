@@ -1,26 +1,31 @@
 <?php
     class Authentication extends Middleware {
-
+        
         public function __construct() {
             $this->meta = [
                 'status' => false
             ];
 
+            //$this->meta['redirect-reference'] = '';
+
             $this->passStatus = false;
         }
 
-        public function Invoke($args = null) {
+        public function Invoke($_request) {
+            //var_dump($_request);
 
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                return $this->FormInputAuthenticate();
+                return $this->FormInputAuthenticate($_request['uri']);
             }
             else {
-                return $this->TokenAuthenticate();
+                return $this->TokenAuthenticate($_request['uri']);
             }
 
         }
         
-        private function FormInputAuthenticate() {
+        private function FormInputAuthenticate($_target) {
+
+
             $username = $_POST['username'];
             $password = $_POST['password'];
 
@@ -40,13 +45,13 @@
             else {
                 echo 'wrong user';
                 $this->meta['status'] = $this->passStatus;
-                $this->meta['redirect'] = 'login?error=1';
+                $this->meta['redirect'] = 'login?error=1&target='.$_target;
 
                 return $this->meta;
             }
         }
 
-        private function TokenAuthenticate() {
+        private function TokenAuthenticate($_target) {
             $token = $this->GetToken();
             $toke_data;
 
@@ -62,7 +67,7 @@
                 $this->passStatus = false;
 
                 $this->meta['status'] = $this->passStatus;
-                $this->meta['redirect'] = 'login/';
+                $this->meta['redirect'] = 'login?target='.$_target;
                 
                 return $this->meta;
             }
@@ -87,7 +92,7 @@
                     $this->passStatus = false;
 
                     $this->meta['status'] = $this->passStatus;
-                    $this->meta['redirect'] = 'login?error=2';
+                    $this->meta['redirect'] = 'login?error=2&target='.$_target;
                 }
                 return $this->meta;
             }
