@@ -49,4 +49,8 @@
             //var_dump($binding_pairs);
             return $this->Insert($sql, $binding_pairs);
         }
+
+        public function GetLastInsert() {
+            
+        }
     }

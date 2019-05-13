@@ -35,6 +35,7 @@
                 $this->passStatus = true;
                     //echo 'pass';
                 $token = $this->GenerateToken($acc->GetId() ,$username);
+                $_SESSION['account'] = $acc;
 
                 $this->PlaceToken($token);
 
@@ -52,7 +53,7 @@
         }
 
         private function TokenAuthenticate($_target) {
-            $token = $this->GetToken();
+            $token = self::GetToken();
             $toke_data;
 
             if (isset($token)) {
@@ -68,7 +69,11 @@
 
                 $this->meta['status'] = $this->passStatus;
                 $this->meta['redirect'] = 'login?target='.$_target;
-                
+
+                if (isset($_SESSION['account'])) {
+                    unset($_SESSION['account']);
+                }
+
                 return $this->meta;
             }
             else {
@@ -93,12 +98,16 @@
 
                     $this->meta['status'] = $this->passStatus;
                     $this->meta['redirect'] = 'login?error=2&target='.$_target;
+
+                    if (isset($_SESSION['account'])) {
+                        unset($_SESSION['account']);
+                    }
                 }
                 return $this->meta;
             }
         }
 
-        private function GetToken() {
+        public static function GetToken() {
 
             if (isset($_COOKIE['token'])) {
 

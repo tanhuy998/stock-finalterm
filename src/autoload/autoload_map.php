@@ -4,6 +4,8 @@
     $base_path = dirname(dirname(__DIR__));
     
     return [
+        'Curl' => $base_path.'\lib\curl.php',
+        'AccountWalletModel' => $base_path.'\MVC\model\accountwalletmodel.php',
         'TransactionSession' => $base_path.'\MVC\middleware\transactionsession.php',
         'TradingController' => $base_path.'\MVC\model\tradingcontroller.php',
         'TransactionShareModel' => $base_path.'\MVC\model\transactionsharemodel.php',

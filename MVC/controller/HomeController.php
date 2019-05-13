@@ -25,4 +25,34 @@
             //var_dump($_args);
             $view = new HomeView();
         }
+
+        public function Deal($_request) {
+            $data = $_SESSION['tran_sess'];
+            
+            $account = $_SESSION['account'];
+            
+            $account->StartDeal($data['time'], $data['amount'], $data['percent']);
+
+            Route::Redirect('home/');
+        }
+
+        public function Close($_request) {
+            $data = $_SESSION['tran_sess'];
+            
+            $account = $_SESSION['account'];
+            
+            $account->CloseDeal($data['time']);
+
+            Route::Redirect('home/');
+        }
+
+        public function Deposite($_request) {
+            $data = $_SESSION['tran_sess'];
+            
+            $account = $_SESSION['account'];
+            
+            $account->FillMoney($data['amount']);
+
+            Route::redirect('home/');
+        }
     }

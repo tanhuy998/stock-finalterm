@@ -21,8 +21,8 @@
             return $this->Select($sql);
         }
 
-        public function InsertSingle($_userID, $_amount, $_tran_type) {
-            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, SHARE_NUM, STATUS, TRADE_TIME, TRAN_TYPE_ID) VALUES (:id ,:amount, 1, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :tid)';
+        public function InsertSingle($_userID, $_amount, $_tran_type, $_percent, $_time) {
+            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, AMOUNT, STATUS, TRADE_TIME, TRAN_TYPE) VALUES (:id ,:amount, 0, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :type)';
 
             $current_time = date('Y-m-d H:i:s');
             $typeID = intval(self::GetTransactionTypeID($_tran_type));
@@ -31,7 +31,7 @@
             $binding = [
                 ':id' => $_userID,
                 ':amount' => $_amount,
-                ':tID' => $typeID,
+                ':type' => $typeID,
                 ':time' => $current_time
             ];
 
@@ -51,5 +51,11 @@
             $res = $model->Select($sql);
 
             return $res[0]['ID'];
-        }   
+        }
+
+        public function GetUnclosedTransactionByAccountId($_id) {
+            $sql = "SELECT * FROM TRANSACTION_SHARE WHERE TRANSACTION_SHARE.ACCOUNT_ID = $_id AND TRANSACTION_SHARE.STATUS = 0";
+
+            return $this->Select($sql);
+        }
     }

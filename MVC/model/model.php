@@ -51,4 +51,13 @@
             
             return $return_val;
         }
+
+        public function Update(string $_sql, array $_binding_pairs = []) {
+            $resource = oci_parse($this->conn, $_sql);
+
+            $res = $this->BindValues($resource, $_binding_pairs);
+            
+            //var_dump($resource);
+            return oci_execute($res);
+        }
     }

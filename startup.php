@@ -7,8 +7,10 @@
     
 
     Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
+    Router::Routes()->Add('home/deposite/', 'HomeController:Deposite')->SetMiddleware('TransactionSession-Authentication');
+    Router::Routes()->Add('home/close/', 'HomeController:Close')->SetMiddleware('TransactionSession-Authentication');
+    Router::Routes()->Add('home/deal/', 'HomeController:Deal')->SetMiddleware('TransactionSession-Authentication');
     Router::Routes()->Add('login/', 'LoginController:Index');
-    Router::Routes()->Add('share-trading/', 'transactionController')->SetMiddleware('TransactionSession-Authentication');
     Router::Routes()->add('logout/', function($_request) {
         setcookie('token', '', 0, '/');
         
@@ -28,10 +30,10 @@
 
         //$res = $db->Select($sql);
 
-        $tran = new TransactionShareModel();
-        $id = $tran->GetByAccountID('107');
+        $acc = new Account('new3', '1234');
 
-        var_dump($id);
+        $acc->StartDeal();
+        //var_dump($id);
     });
     //Router::Routes()->Add('signin/', 'SigninController:Index');
 
