@@ -3,7 +3,21 @@
     session_start();
     require_once 'src/define.php';
     require_once 'src/autoload/autoload.php';
-    
+
+    $http_host = $_SERVER['HTTP_HOST'];
+    //echo $http_host = 'http://'.$http_host;
+
+    $allow_origin = [
+        'http://localhost', 
+        'http://'.HOST_IP, 
+        'http://'.DOMAIN_NAME
+    ];
+
+    if (in_array($http_host, $allow_origin)) {
+        header("Access-Control-Allow-Origin: $http_host");
+        header("Access-Control-Allow-Header: $http_host");
+    }
+    // Allow CORS for XHR request
     
 
     Router::Routes()->Add('home/', 'HomeController:Index')->SetMiddleware('Authentication');
@@ -47,7 +61,7 @@
     // echo Parser::ParseUri('/abc?a');
 
     Router::SetHome('home/');
-
+    //echo '<1>';
     $request = Parser::BindingRequest();
     //echo $_SERVER['REQUEST_URI'];
     // $request['uri'] = Parser::ParseRequestUri($_SERVER['REQUEST_URI']);
@@ -56,26 +70,32 @@
     //echo $request['uri'];
     $route = Router::GetObject()->Map($request);
     //echo 5;
+    
     if ($route !== null) {
         $route_stat = $route->LoadMiddleWare($request);
         //echo 4;
+        //echo '<test>';
         if (isset($route_stat['redirect'])) {
             $link = $route_stat['redirect'];
             //echo $link;
+            
             Route::Redirect($link);
         }
         else {
+            //echo '<2>';
             //echo 7;
             if ($route_stat['status'] === true) {
                 //echo 6;
+                //echo '<4>';
                 $route->Render($request);
             }
             else {
-
+                echo '<5>';
             }
         }
     }
     else {
+        //echo '<3>';
         Router::RedirectHttpCode('404');
     }
     

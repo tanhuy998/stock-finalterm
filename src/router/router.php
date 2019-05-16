@@ -51,7 +51,7 @@
         public function Map(array &$_request) {
             $uri = $_request['uri'];
             $request_data = $_request['data'];
-
+            
             if ($this->IsRedirected($uri)) {
                 $redirect_link = $this->redirectMap[$uri];
                 

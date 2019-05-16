@@ -13,11 +13,13 @@
 
         public function Invoke($_request) {
             //var_dump($_request);
-
+            //echo '<auth>';
+            
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 return $this->FormInputAuthenticate($_request['uri']);
             }
             else {
+                //echo '<get>';
                 return $this->TokenAuthenticate($_request['uri']);
             }
 
@@ -35,7 +37,7 @@
                 $this->passStatus = true;
                     //echo 'pass';
                 $token = $this->GenerateToken($acc->GetId() ,$username);
-                $_SESSION['account'] = $acc;
+                $_SESSION['account'] = serialize($acc);
 
                 $this->PlaceToken($token);
 
@@ -73,7 +75,7 @@
                 if (isset($_SESSION['account'])) {
                     unset($_SESSION['account']);
                 }
-
+                
                 return $this->meta;
             }
             else {
@@ -118,7 +120,7 @@
         }
 
         private function PlaceToken(string $_token) {
-            setcookie('token', $_token, time() + (60*5), '/');
+            setcookie('token', $_token, time() + (60*60*24), '/');
         }
 
         public static function ParseToken($_token): array {

@@ -10,7 +10,7 @@
             // if (isset($_SESSION['tran_sess'])) {
             //     unset($_SESSION['tran_sess']);
             // }
-            var_dump($_request);
+            //var_dump($_request);
             $this->meta['status'] = $this->passStatus;
 
             $data = $_request['data'];
@@ -32,8 +32,8 @@
                 $_SESSION['tran_sess'] = $session;
             }
 
-            echo 'session';
-            
+            //echo 'session';
+            //var_dump($this->meta);
             //$this->meta['redirect']
             return $this->meta;
         }

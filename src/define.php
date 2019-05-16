@@ -6,6 +6,9 @@
     define('SUB_PATH_DOMAIN_NAME','/stock/');
 
     $ip = gethostbyname(gethostname());
-    define('DOMAIN_NAME', $ip);
+    define('HOST_IP', $ip);
+    $host = gethostbyaddr($ip);
+    //echo $host;
+    define('DOMAIN_NAME', $host);
 
     define('DOMAIN', DOMAIN_NAME.SUB_PATH_DOMAIN_NAME);

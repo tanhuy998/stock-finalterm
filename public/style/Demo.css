@@ -13,7 +13,7 @@ body{
 	width: 100px;
 	height: 560px;
 	float: right;	
-	background-image: url("BG1.png");
+	background-image: url("http://localhost/stock/public/img/BG1.png");
 	background-size: 150px;	
 }
 #leftbar{
@@ -35,7 +35,7 @@ body{
 	float: left;
 	width: 77.5%;
 	height: 560px;
-	background-image: url("BG1.png");
+
 	background-size: 150px;	
 	position: relative;
 }
@@ -205,4 +205,20 @@ table:hover{
 	position:absolute; 
 	top:20px; 
 	left:30px;
+}
+.centerText{
+	position: relative;
+	margin: 5px auto 5px auto;
+	width: 85px;
+	height: 30px;
+	border-radius: 10px;
+	text-align: center;	
+	color: white;
+	background-color: #4d4d4d;
+	padding-top: 10%;
+	margin-top: 20%;
+}
+.centerText:hover {
+	background-color: #808080;	
+	cursor: pointer;
 }

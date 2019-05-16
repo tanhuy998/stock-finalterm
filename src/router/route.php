@@ -105,7 +105,7 @@
 
                 self::Redirect($redirect_link);
             }
-
+            //echo '<4>';
             //var_dump($_args);
             if (!isset($this->meta['Controller'])) {
 
@@ -199,6 +199,8 @@
         }
 
         private function InvokeMiddlewareSequence(array $_queue, $_args) {
+            $metaData;
+
             foreach ($_queue as $middleware) {
                 // $method_reflector = new ReflectionMethod($middleware_name, 'Invoke');
 
@@ -216,7 +218,7 @@
                 $metaData = $this->InvokeSingleMiddlewareClass($middleware, $_args);
 
                 if (isset($metaData['redirect'])) return $metaData;
-
+                    
                 if ($metaData['status'] === false) {
                     $metaData['meta'] = [
                         'block_at' => $middleware,
@@ -227,6 +229,8 @@
                     return $metaData;
                 } 
             }
+
+            return $metaData;
         }
 
         private function InvokeSingleMiddlewareClass($_middleware, $_args) {

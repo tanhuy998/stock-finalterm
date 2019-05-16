@@ -27,32 +27,62 @@
         }
 
         public function Deal($_request) {
-            $data = $_SESSION['tran_sess'];
+            //$data = $_SESSION['tran_sess'];
+            $data = $_request['data'];
             
-            $account = $_SESSION['account'];
+            $account = unserialize($_SESSION['account']);
             
-            $account->StartDeal($data['time'], $data['amount'], $data['percent']);
-
-            Route::Redirect('home/');
+            //var_dump($data);
+            // 
+            if ($data != null) {
+                $susess = $account->StartDeal($data['purTime'], $data['purAmount'], $data['lever'], $data['purPrice'], $data['method']);
+                if ($susess == true) {
+                    echo 'deal susess';
+                }
+                else {
+                    echo 'deal failed';
+                }
+            }
+            else {
+                echo 'no request data';
+            }
+            // 
+            //Route::Redirect('home/');
         }
 
         public function Close($_request) {
-            $data = $_SESSION['tran_sess'];
-            
-            $account = $_SESSION['account'];
-            
-            $account->CloseDeal($data['time']);
+            //$data = $_SESSION['tran_sess'];
+            $data = $_request['data'];
 
-            Route::Redirect('home/');
+            $account = unserialize($_SESSION['account']);
+            
+            if($account->CloseDeal($data['closeTime'],$data['closePrice'])) {
+
+                echo 'close susess';
+            };
+
+            //Route::Redirect('home/');
         }
 
         public function Deposite($_request) {
-            $data = $_SESSION['tran_sess'];
+            //$data = $_SESSION['tran_sess'];
             
-            $account = $_SESSION['account'];
+            $account = unserialize($_SESSION['account']);
             
-            $account->FillMoney($data['amount']);
+            $data = $_request['data'];
 
-            Route::redirect('home/');
+            if (isset($data['depositeAmount'])) {
+
+                if($account->FillMoney($data['depositeAmount'])) {
+                    echo 'deposite susess';
+                }
+                else echo 'deposite failed';
+            }
+            
+            //
+            
+            //Route::redirect('logout/');
+            //header('Content-Type: application/json');
+            //echo json_encode($_GET['depositeAmount']);
         }
     }

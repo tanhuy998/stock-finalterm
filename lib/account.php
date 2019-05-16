@@ -82,22 +82,40 @@
             return $model->UpdateSingle($this->id, $new_amount);
         }
 
-        public function StartDeal($_time, $_amount, $_percent) {
+        public function StartDeal($_time, $_amount, $_percent, $_price, $_type) {
             $unclosed_deal = $this->GetUnclosedDeal();
 
-            $date;
+            $budget = $this->GetAmount();
 
-            if ($unclosed_deal == null) {
+            $can_deal = (floatval($budget) >= floatval($_amount))? true : false;
+
+            if ($unclosed_deal == null && $can_deal == true) {
             
                 $model = new TransactionShareModel();
 
-                
+                $susess =  $model->InsertSingle($this->id, $_time, $_amount, $_percent, $_price, $_type);
+
+                if ($susess == true) {
+                    $money = '-'.$_amount;
+
+                    return $this->FillMoney($money);
+                }
+                else return false;
             }
 
+            return false;
         }
 
-        public function CloseDeal($_time) {
-            
+        public function CloseDeal($_time, $_price) {
+            $unclosed_deal = $this->GetUnclosedDeal();
+
+
+
+            if ($unclosed_deal) {
+
+
+                return true;
+            }
         }
 
         private function GetUnclosedDeal() {

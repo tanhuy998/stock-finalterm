@@ -21,21 +21,41 @@
             return $this->Select($sql);
         }
 
-        public function InsertSingle($_userID, $_amount, $_tran_type, $_percent, $_time) {
-            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, AMOUNT, STATUS, TRADE_TIME, TRAN_TYPE) VALUES (:id ,:amount, 0, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :type)';
+        public function InsertSingle($_userID, $_time, $_amount, $_percent, $_price, $_tran_type) {
+            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, AMOUNT, STATUS, TRADE_TIME, TRAN_TYPE, PERCENTAGE, PRICE) VALUES (:id ,:amount, 0, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :type, :percent, :price)';
 
-            $current_time = date('Y-m-d H:i:s');
-            $typeID = intval(self::GetTransactionTypeID($_tran_type));
+            //$current_time = date('Y-m-d H:i:s');
+            //$typeID = intval(self::GetTransactionTypeID($_tran_type));
 
 
             $binding = [
                 ':id' => $_userID,
                 ':amount' => $_amount,
-                ':type' => $typeID,
-                ':time' => $current_time
+                ':type' => $_tran_type,
+                ':time' => $_time,
+                ':percent' => $_percent,
+                ':price' => $_price,
             ];
 
             return $this->Insert($sql, $binding);
+        }
+
+        public function UpdateUnclose($_userID, $_time, $_price) {
+            $sql = <<<SQL
+                    UPDATE TRANSACTION_SHARE 
+                    SET CLOSE_TIME = :time, 
+                        CLOSE_PRICE = :price, 
+                        STATUS = 1 
+                    WHERE TRANSACTION_SHARE.ACCOUNT_ID = :id AND TRANSACTION_SHARE.STATUS = 0
+SQL;
+
+            $binding = [
+                ':id' => $_userID,
+                ':time' => $_time,
+                ':price' => $_price
+            ];
+
+            return $this->Update($sql, $binding);
         }
 
         public function Delete() {
