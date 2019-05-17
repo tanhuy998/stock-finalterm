@@ -38,7 +38,7 @@
 			</tr>
 			
 			<tr>
-				<td colspan="2" id="signup"><a href="" target="_blank">SIGN UP</a></td>
+				<td colspan="2" id="signup"><a href="<?php echo 'http://'.DOMAIN.'signup'?>" target="_blank">SIGN UP</a></td>
 			</tr>
 		</table>
 	</form>

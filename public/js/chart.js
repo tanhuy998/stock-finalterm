@@ -8,7 +8,7 @@ var lowestPrice;
 var left;
 var dataObj = [];
 
-var host = 'http://smc-pc';
+var host = 'http://192.168.1.94';
 
 jQuery.ajax({
     url: url,

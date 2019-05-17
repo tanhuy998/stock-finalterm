@@ -4,6 +4,9 @@
     $base_path = dirname(dirname(__DIR__));
     
     return [
+        'AccountInfoModel' => $base_path.'\MVC\model\accountinfomodel.php',
+        'SignUpView' => $base_path.'\MVC\view\signup.php',
+        'SignUpController' => $base_path.'\MVC\controller\signupcontroller.php',
         'Curl' => $base_path.'\lib\curl.php',
         'AccountWalletModel' => $base_path.'\MVC\model\accountwalletmodel.php',
         'TransactionSession' => $base_path.'\MVC\middleware\transactionsession.php',

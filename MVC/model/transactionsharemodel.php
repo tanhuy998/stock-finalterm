@@ -22,7 +22,7 @@
         }
 
         public function InsertSingle($_userID, $_time, $_amount, $_percent, $_price, $_tran_type) {
-            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, AMOUNT, STATUS, TRADE_TIME, TRAN_TYPE, PERCENTAGE, PRICE) VALUES (:id ,:amount, 0, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :type, :percent, :price)';
+            $sql = 'INSERT INTO TRANSACTION_SHARE (ACCOUNT_ID, AMOUNT, STATUS, TRADE_TIME, TRAN_TYPE, LEVER, PRICE) VALUES (:id ,:amount, 0, TO_DATE(:time, \'YYYY/MM/DD HH24:MI:SS\'), :type, :percent, :price)';
 
             //$current_time = date('Y-m-d H:i:s');
             //$typeID = intval(self::GetTransactionTypeID($_tran_type));
@@ -40,10 +40,10 @@
             return $this->Insert($sql, $binding);
         }
 
-        public function UpdateUnclose($_userID, $_time, $_price) {
+        public function UpdateUnclosed($_userID, $_time, $_price) {
             $sql = <<<SQL
                     UPDATE TRANSACTION_SHARE 
-                    SET CLOSE_TIME = :time, 
+                    SET CLOSE_TIME = TO_DATE(:time, 'YYYY/MM/DD HH24:MI:SS'), 
                         CLOSE_PRICE = :price, 
                         STATUS = 1 
                     WHERE TRANSACTION_SHARE.ACCOUNT_ID = :id AND TRANSACTION_SHARE.STATUS = 0

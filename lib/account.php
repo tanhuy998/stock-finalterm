@@ -52,23 +52,42 @@
             }
         }
 
-        public static function New(string $_name, string $_pass) {
+        public static function New(array $_data) {
+
+            $username = $_data['username'];
+            $pass = $_data['password'];
 
             $model = new AccountModel();
 
-            if ($model->InsertSingle($_name, $_pass)) {
+            if ($model->InsertSingle($username, $pass)) {
+
                 $model = new Model('TRADER_STOCK','1234' , 'orcl');
                 $sql = 'SELECT MAX(ID) AS ID FROM ACCOUNT';
 
                 $new_user_id = $model->Select($sql)[0]['ID'];
 
+                $model = new AccountInfoModel();
+
+                $model->InsertSingle($new_user_id, $_data);
+
                 $model = new AccountWalletModel();
 
-                
-                return $model->InsertSingle($new_user_id);
+                if ($model->InsertSingle($new_user_id)) {
+
+                    $acc = new self($username, $pass);
+
+                    if ($acc->IsValid()) {
+                        $_SESSION['account'] = serialize($acc);
+
+                        $token = Authentication::GenerateToken($new_user_id, $username);
+                        Authentication::PlaceToken($token);
+                    }
+                    
+                    return true;
+                }
+                else return false;
             }
-            
-            return false;
+            else return false;
         }
 
         public function FillMoney($_amount) {
@@ -109,13 +128,31 @@
         public function CloseDeal($_time, $_price) {
             $unclosed_deal = $this->GetUnclosedDeal();
 
-
-
             if ($unclosed_deal) {
 
+                $deal = $unclosed_deal[0];
 
-                return true;
+                $deal_price = floatval($deal['PRICE']);
+                $deal_amount = floatval($deal['AMOUNT']);
+                $lever = intval($deal['LEVER']);
+            
+                $close_price = floatval($_price);
+
+                $profit = (abs($close_price - $deal_price)/$close_price)*$lever;
+                $profit *= $deal_amount;
+
+                $type = intval($deal['TRAN_TYPE']);
+
+                $total = ($type == 1 && $close_price >$deal_price)? $deal_amount + $profit: $deal_amount - $profit;
+
+                if ($this->FillMoney($total)) {
+                    $model = new TransactionShareModel();
+
+                    return $model->UpdateUnclosed($this->id, $_time, $_price);
+                }
+                return false;
             }
+            else return false;
         }
 
         private function GetUnclosedDeal() {

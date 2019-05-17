@@ -36,10 +36,10 @@
             if ($acc->IsValid()) {
                 $this->passStatus = true;
                     //echo 'pass';
-                $token = $this->GenerateToken($acc->GetId() ,$username);
+                $token = self::GenerateToken($acc->GetId() ,$username);
                 $_SESSION['account'] = serialize($acc);
 
-                $this->PlaceToken($token);
+                self::PlaceToken($token);
 
                 $this->passStatus = true;
                 $this->meta['status'] = $this->passStatus;
@@ -119,7 +119,7 @@
             return null;
         }
 
-        private function PlaceToken(string $_token) {
+        public static function PlaceToken(string $_token) {
             setcookie('token', $_token, time() + (60*60*24), '/');
         }
 
@@ -136,7 +136,7 @@
             return $return_data;
         }
 
-        private function GenerateToken($_id, $_username) {
+        public static function GenerateToken($_id, $_username) {
             $token_lvl1 = convert_uuencode($_username).'@-@'.convert_uuencode($_id);
 
             $token_lvl2 = base64_encode($token_lvl1);

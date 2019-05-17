@@ -25,11 +25,13 @@
     Router::Routes()->Add('home/close/', 'HomeController:Close')->SetMiddleware('TransactionSession-Authentication');
     Router::Routes()->Add('home/deal/', 'HomeController:Deal')->SetMiddleware('TransactionSession-Authentication');
     Router::Routes()->Add('login/', 'LoginController:Index');
-    Router::Routes()->add('logout/', function($_request) {
+    Router::Routes()->Add('logout/', function($_request) {
         setcookie('token', '', 0, '/');
         
         Route::Redirect('home/');
     });
+    Router::Routes()->Add('signup/', 'SignUpController:Index');
+    Router::Routes()->Add('signup-reg', 'SignUpController:Sign');
 
     Router::Routes()->Add('temp/', function() {
         // $db = new Model('TRADER_STOCK','1234','orcl');

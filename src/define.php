@@ -9,6 +9,6 @@
     define('HOST_IP', $ip);
     $host = gethostbyaddr($ip);
     //echo $host;
-    define('DOMAIN_NAME', $host);
+    define('DOMAIN_NAME', $ip);
 
     define('DOMAIN', DOMAIN_NAME.SUB_PATH_DOMAIN_NAME);
