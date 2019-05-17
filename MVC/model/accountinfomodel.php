@@ -9,7 +9,7 @@
                 INSERT INTO ACCOUNT_INFORMATION
                 (NAME, BIRTHDAY, ADDRESS, ACCOUNT_ID)
                 VALUES
-                (:name, TO_DATE(:birth, 'DD/MM/YYYY'), :addr, :id)
+                (:name, TO_DATE(:birth, 'YYYY-MM-DD'), :addr, :id)
 SQL;
 
             $binding = [

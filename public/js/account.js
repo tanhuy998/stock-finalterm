@@ -45,3 +45,7 @@ function test (show) {
         show.style.color = 'Red';
     }
 }
+
+function show() {
+    console.log(birthday.value);
+}

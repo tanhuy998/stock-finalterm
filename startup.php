@@ -46,9 +46,15 @@
 
         //$res = $db->Select($sql);
 
-        $acc = new Account('new3', '1234');
+        $data = [
+            'fullname' => 'abcd',
+            'birthday' => '2000-05-11',
+            'address' => '22 jump'
+        ];
 
-        $acc->StartDeal();
+        $model = new AccountInfoModel();
+
+        echo $model->InsertSingle('113', $data);
         //var_dump($id);
     });
     //Router::Routes()->Add('signin/', 'SigninController:Index');
